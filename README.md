@@ -1,49 +1,75 @@
-# Agent Skills
+# 8917-skills
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![GitHub](https://img.shields.io/badge/GitHub-agent--skills-blue.svg)](https://github.com/Blicae8917/agent-skills)
-
-> 实用 AI Agent Skills 集合
-
-开箱即用的 Agent 能力增强包。
+> 8917 的开源能力兵工厂，收录已治理、可复用、可发布的主权技能与 wrapper。
 
 ---
 
-## Skills 列表
+## 第一批技能资产（已入库）
 
-| Skill | 版本 | 说明 |
+| Skill | 说明 | 状态 |
 |:---|:---|:---|
-| [dce-protocol](packages/dce-protocol/) | v2.0.0 | Discuss-Confirm-Execute 安全协议 |
+| `8917-minimax-toolkit` | MiniMax 多模态生成工具集（图片 / 视频 / 语音 / 音乐） | 已入库 |
+| `8917-docx-official` | 将 Markdown 或已有内容转换为公文/正式格式 docx 的技能 | 已入库 |
+| `8917-content-ingest` | 提取 URL / 网页 / X / 视频链接正文的抓取层技能 | 已入库 |
 
 ---
 
-## 快速开始
+## Related Repository
 
-```bash
-# 通过 ClawHub 安装
-clawhub install dce-protocol
+### `8917-organization-mastery`
+组织管理与方法论主仓，承载：
+- D.C.E. 协议
+- 组织治理框架
+- 方法论与理论资产
 
-# 或手动安装
-cp packages/dce-protocol/SKILL.md ~/.agents/skills/
-cp -r packages/dce-protocol/templates/* ~/your-agent/
+### 与 `8917-skills` 的关系
+- `8917-skills` 负责 **可执行的技能资产与能力兵工厂**
+- `8917-organization-mastery` 负责 **原则、治理与方法论**
+
+一句话说：
+> `8917-skills` 解决“能力怎么落地”，`8917-organization-mastery` 解决“为什么这样做、按什么原则做”。
+
+---
+
+## 当前仓库结构
+
+```text
+8917-skills/
+├── README.md
+├── skills/
+│   └── native/
+│       ├── 8917-minimax-toolkit/
+│       ├── 8917-docx-official/
+│       └── 8917-content-ingest/
+├── protocol/
+├── references/
+├── pending/
+├── packages/   # 迁移过渡期保留
+└── specs/      # 迁移过渡期保留
 ```
 
 ---
 
-## 理论基础
+## 迁移说明
 
-这些 Skills 基于 [organization-mastery](https://github.com/Blicae8917/organization-mastery) 方法论：
-- [DCE 设计原则](https://github.com/Blicae8917/organization-mastery/blob/main/docs/DESIGN.md)
-- [信息挖掘机制](https://github.com/Blicae8917/organization-mastery/blob/main/docs/DESIGN.md)
+当前仓库仍保留早期结构：
+- `packages/`
+- `specs/`
 
-**建议**: 先理解原理，再使用工具，效果提升 3 倍。
-
----
-
-## 开发 Skills
-
-参考 [specs/skill-spec-v1.md](specs/skill-spec-v1.md)
+它们将在迁移过程中逐步整理，不作为未来长期主结构。
 
 ---
 
-_由 [8917OpenClaw](https://github.com/Blicae8917) 维护_
+## 协议与规范
+
+本仓库后续将逐步引入与 skill 直接相关的公开协议与规范，放入：
+- `protocol/`
+
+例如：
+- Skill Governance
+- Communication Shortcodes
+- Skill Design Patterns
+
+---
+
+_由 8917OpenClaw 维护_
