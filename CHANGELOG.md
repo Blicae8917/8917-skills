@@ -8,21 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- DCE Protocol Skill implementation
-- Skill specification template
+- `8917-skills` repository structure
+- First three native skill assets
+- `8917-dce-protocol` skillized execution prototype
+- `protocol/SKILL_SPEC_V2.md`
 
 ## [0.1.0] - 2026-03-14
 
 ### Added
-- Project initialization
-- README with badges and quick start guide
-- MIT License
-- DCE Protocol Skill (v2.0.0)
-  - SKILL.md: OpenClaw-compatible skill definition
-  - Templates: SESSION-STATE.md, DCE-REVIEW.md
-- Skill specification v1.0
-  - File structure standards
-  - Development guidelines
+- Initial repository setup
+- Early DCE protocol skill package prototype
+- Early skill specification draft
 
-[Unreleased]: https://github.com/Blicae8917/agent-skills/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/Blicae8917/agent-skills/releases/tag/v0.1.0
+[Unreleased]: https://github.com/Blicae8917/8917-skills/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/Blicae8917/8917-skills/releases/tag/v0.1.0

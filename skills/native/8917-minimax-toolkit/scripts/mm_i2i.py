@@ -32,7 +32,7 @@ def main():
     with open(args.ref, "rb") as f:
         files = {"file": (os.path.basename(args.ref), f, "image/jpeg")}
         upload_resp = requests.post(
-            f"{client.base_url}/v1/files/upload",
+            f"{client.base_url}/files/upload",
             headers={"Authorization": f"Bearer {client.api_key}"},
             files=files
         )

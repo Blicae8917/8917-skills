@@ -62,7 +62,7 @@ def main():
         with open(args.media, "rb") as media_file:
             files = {"file": media_file}
             upload_resp = requests.post(
-                f"{client.base_url}/v1/files/upload",
+                f"{client.base_url}/files/upload",
                 headers={"Authorization": f"Bearer {client.api_key}"},
                 files=files
             )

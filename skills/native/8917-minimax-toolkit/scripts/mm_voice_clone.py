@@ -48,7 +48,7 @@ def main():
     with open(args.audio, "rb") as f:
         files = {"file": (os.path.basename(args.audio), f, mime)}
         resp = requests.post(
-            f"{client.base_url}/v1/voice/clone/upload",
+            f"{client.base_url}/voice/clone/upload",
             headers={"Authorization": f"Bearer {client.api_key}"},
             files=files
         )
@@ -67,7 +67,7 @@ def main():
         with open(args.prompt_audio, "rb") as f:
             files2 = {"file": (os.path.basename(args.prompt_audio), f, mime2)}
             resp2 = requests.post(
-                f"{client.base_url}/v1/voice/clone/upload_prompt",
+                f"{client.base_url}/voice/clone/upload_prompt",
                 headers={"Authorization": f"Bearer {client.api_key}"},
                 files=files2
             )
@@ -88,7 +88,7 @@ def main():
         clone_data["clone_prompt"] = {"prompt_audio": {"file_id": prompt_file_id}}
 
     clone_resp = requests.post(
-        f"{client.base_url}/v1/voice/clone",
+        f"{client.base_url}/voice/clone",
         headers={"Authorization": f"Bearer {client.api_key}", "Content-Type": "application/json"},
         json=clone_data
     )

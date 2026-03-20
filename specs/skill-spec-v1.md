@@ -1,36 +1,26 @@
-# Skill 规范 v1.0
+# Skill 规范 v1.0（历史版本）
 
-## 文件结构
+> 这是 `agent-skills` 时代留下的旧版规范。
+> 当前仅作为迁移参考，不再作为 `8917-skills` 的现行标准。
 
-```
-skill-name/
-├── README.md          # Skill 说明（用户视角）
-├── SKILL.md           # 协议定义（Agent 视角）
-├── src/               # 代码实现（可选）
-│   ├── core/
-│   ├── templates/
-│   └── utils/
-└── tests/             # 测试用例
-```
+## 当前状态
+- **状态**：Legacy / Historical Reference
+- **现行规范**：请改看 `../protocol/SKILL_SPEC_V2.md`
 
-## SKILL.md 头部格式
+## 为什么降级
+旧版规范中包含若干已不再适配 `8917-skills` 当前结构的设计，例如：
+- 将 `README.md` 视为每个 skill 的默认组成部分
+- 使用 `version` / `author` 作为常规 frontmatter 字段
+- 强调 `src/` 与 `tests/` 作为 skill 内默认结构
 
-```yaml
----
-name: skill-name
-version: x.y.z
-description: "一句话描述"
-author: "作者名"
----
-```
+这些约束与当前 8917 技能治理规则已不一致。
 
-## 最佳实践
-
-1. **单一职责** — 一个 Skill 解决一类问题
-2. **自包含** — 不依赖外部文件（除非明确声明）
-3. **可验证** — 提供使用示例和预期输出
-4. **渐进增强** — 基础功能可用，高级功能可选
+## 保留原因
+保留本文件是为了：
+1. 给旧资产迁移提供参考
+2. 保留仓库演进历史
+3. 方便对比 v1 与 v2 的结构变化
 
 ---
 
-_待完善_
+_This file is retained for migration and historical comparison only._

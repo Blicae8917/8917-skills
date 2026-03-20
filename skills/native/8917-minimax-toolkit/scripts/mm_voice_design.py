@@ -40,7 +40,7 @@ def main():
 
     print("正在生成音色...")
     resp = requests.post(
-        f"{client.base_url}/v1/voice/design",
+        f"{client.base_url}/voice/design",
         headers={"Authorization": f"Bearer {client.api_key}", "Content-Type": "application/json"},
         json=data
     )

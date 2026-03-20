@@ -5,7 +5,7 @@ metadata:
   {
     "openclaw": {
       "emoji": "📝",
-      "requires": { "bins": ["python3"] },
+      "requires": { "bins": ["python3", "gcc", "soffice"] },
       "install": []
     }
   }

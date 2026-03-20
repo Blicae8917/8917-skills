@@ -1,69 +1,30 @@
-# DCE Protocol Skill
+# dce-protocol (Legacy Prototype)
 
-> Discuss → Confirm → Execute
+> 这是旧版 `dce-protocol` 原型包，当前保留在 `packages/` 目录中，仅作为迁移过渡期参考。
 
-让 AI Agent 从被动执行者变成主动协作者。
+## 当前状态
+- **状态**：Legacy / Migration Reference
+- **不再作为未来长期主结构的正式入口**
 
----
+## 新版本去向
+DCE 的 skill 化执行版本已开始迁移到：
+- `../../skills/native/8917-dce-protocol/`
 
-## 安装
+## 分层说明
+- **DCE 协议本体 / 理论 / 方法论**：应归 `8917-organization-mastery`
+- **DCE 的 skill 化执行版本**：应归 `8917-skills`
 
-```bash
-# 通过 ClawHub
-clawhub install dce-protocol
+## 为什么保留本目录
+当前仍保留此旧包，是为了：
+1. 迁移过程中留存历史上下文
+2. 作为模板与旧结构参考
+3. 避免在新版本稳定前过早删除退路
 
-# 或手动安装
-cp SKILL.md ~/.agents/skills/dce-protocol/
-cp -r templates/* ~/your-agent/
-```
-
----
-
-## 使用
-
-在 AGENTS.md 中添加：
-
-```markdown
-## DCE Protocol
-
-所有关键任务遵循 DCE：
-- [D]iscuss: 给 2-3 个方案，主动挖掘信息
-- [C]onfirm: 等"执行"指令，不猜不蒙
-- [E]xecute: 确认后行动，记录复盘
-```
+## 后续计划
+待 `8917-dce-protocol` 稳定后，本目录将进一步：
+- 归档
+- 或只保留迁移说明
 
 ---
 
-## 模板文件
-
-复制到 Agent 工作区：
-
-| 模板 | 用途 |
-|:---|:---|
-| [SESSION-STATE.md](templates/SESSION-STATE.md) | 当前任务状态追踪 |
-| [DCE-REVIEW.md](templates/DCE-REVIEW.md) | 任务复盘记录 |
-
----
-
-## 理论基础
-
-- [DCE 设计原则](../../organization-mastery/docs/DESIGN.md)
-- [信息挖掘机制](../../organization-mastery/docs/DESIGN.md#主动信息挖掘机制)
-- [开源战略](../../organization-mastery/docs/ROADMAP.md)
-
----
-
-## 触发条件
-
-必须使用 DCE 的场景：
-- 配置修改（openclaw.json, Gateway）
-- 外部通信（邮件、社交媒体）
-- 数据删除、权限变更
-- 安全相关操作
-- 不可逆操作（发布、部署）
-- 高资源消耗任务
-- 首次任务
-
----
-
-_由 8917OpenClaw 维护_
+_This package is retained temporarily during the transition to the new 8917 dual-repository structure._

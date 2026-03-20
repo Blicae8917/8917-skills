@@ -1,68 +1,66 @@
-# Contributing to Agent Skills
+# Contributing to 8917-skills
 
-Thank you for contributing to the AI agent skills ecosystem!
+Thank you for contributing to the 8917 open skill arsenal.
 
 ## Getting Started
 
 ### Prerequisites
 
 - Familiarity with OpenClaw or similar agent frameworks
-- Understanding of the [DCE Protocol](https://github.com/Blicae8917/organization-mastery)
+- Understanding of the DCE methodology in [8917-organization-mastery](https://github.com/Blicae8917/8917-organization-mastery)
 
 ### Development Setup
 
 ```bash
-git clone git@github.com:Blicae8917/agent-skills.git
-cd agent-skills
+git clone git@github.com:Blicae8917/8917-skills.git
+cd 8917-skills
 ```
 
 ## Creating a New Skill
 
-1. **Copy the template**:
-   ```bash
-   cp -r packages/dce-protocol packages/your-skill-name
-   ```
+1. Decide the skill's role clearly:
+   - Native skill
+   - Wrapper
+   - Experimental skill
 
-2. **Update SKILL.md**:
-   - Change `name`, `version`, `description`
-   - Write clear usage instructions
-   - Include examples
+2. Follow the current spec:
+   - `protocol/SKILL_SPEC_V2.md`
 
-3. **Test your skill**:
-   - Install in a test agent workspace
-   - Verify all features work
-   - Document any limitations
+3. Place the skill in the appropriate structure:
+   - `skills/native/`
+   - `skills/wrappers/` (future)
+   - or `pending/` during incubation
 
-4. **Submit a PR**:
-   - Follow the PR template
-   - Include screenshots/examples if applicable
+4. Keep the skill lean:
+   - Clear trigger description
+   - Minimal frontmatter
+   - References/scripts/assets only when needed
+
+5. Submit a PR with:
+   - What the skill solves
+   - Why it belongs in this repo
+   - Whether it is native / wrapper / experimental
 
 ## Skill Quality Standards
 
 | Criterion | Requirement |
 |:---|:---|
-| **Self-contained** | No external dependencies unless documented |
-| **Tested** | Works with latest OpenClaw version |
-| **Documented** | README explains what, why, and how |
-| **Practical** | Solves a real problem, not theoretical |
-
-## Code Style
-
-- Clear, concise instructions
-- Progressive complexity (basic → advanced)
-- Error handling guidance
-- Token-efficient design
+| **Clear role** | Type layer and pattern layer should be clear |
+| **Reusable** | Skill solves a repeatable problem |
+| **Clean structure** | Follows `SKILL_SPEC_V2.md` |
+| **Practical** | Real capability, not theoretical filler |
 
 ## Commit Messages
 
-- `feat:` New skill or feature
+- `feat:` New skill or repo-level capability
 - `fix:` Bug fix
 - `docs:` Documentation update
-- `test:` Test additions/changes
+- `refactor:` Structural cleanup or reorganization
 
 ## Questions?
 
-Open an issue or join the discussion in the organization-mastery repo.
+For skill assets and repository structure, open an issue here.
+For theory, governance, and methodology, use `8917-organization-mastery`.
 
 ---
 
