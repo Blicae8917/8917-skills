@@ -26,6 +26,7 @@
 
 - 以稳定的作者声音撰写公开长文（选题双重质检 → 证据链 → 成文 → 四层自检）
 - 动态组建多视角专家团，对议题做圆桌讨论 / 对抗评审 / 分工规划（无专家库也能独立运行）
+- 对项目 / 方案做对抗式复盘问诊（轻量五问收尾 / 十问全景会诊），带执行债台账闭环与 `.8917/` 工作区落盘
 
 ---
 
@@ -78,6 +79,7 @@
 |:---|:---|:---|
 | `8917-write` | 叶澄风公开长文写作：选题双重质检（HKR + 资产判据）→ 证据链（依据块 + 核源 SOP）→ 四种文章原型 → 标题候选 → 四层自检（证据核验置首） | v0.1，仓内可用 |
 | `8917-expert-panel` | 多视角专家团：三模式（讨论 / 评论 / 规划）× 双档执行（对话内 / Workflow 引擎）；专家来源双源自适应——本机有专家库则优先选用，没有则现场生成 persona，零外部依赖 | v2.1，仓内可用 |
+| `8917-wenzhen` | 问诊·复盘双档：五问（门诊，2 分钟轻量收尾）/ 指挥官十问（会诊，对抗式全景复盘——换轴审查、第十人异议、事前验尸、止损线）；执行债台账闭环 + 产出按 `.8917/` 工作区约定落盘 | v2.2，仓内可用 |
 
 > 早期入库的 `8917-minimax-toolkit`、`8917-docx-official`、`8917-content-ingest`、`8917-dce-protocol` 已于 2026-07 清理出仓（停止维护或被更强的通用工具取代）。历史版本见 git 记录；已通过 ClawHub 安装的用户不受影响。公文写作 skill 将以升级版回归。
 
@@ -91,6 +93,7 @@ clone 仓库后，把需要的 skill 复制到你的 Agent skill 目录：
 git clone git@github.com:Blicae8917/8917-skills.git
 cp -r 8917-skills/skills/8917-write ~/.claude/skills/
 cp -r 8917-skills/skills/8917-expert-panel ~/.claude/skills/
+cp -r 8917-skills/skills/8917-wenzhen ~/.claude/skills/
 ```
 
 或者直接把仓库地址丢给你的 Agent，让它帮你安装。
@@ -123,6 +126,15 @@ skills/8917-write/
 skills/8917-expert-panel/
 ```
 
+### `8917-wenzhen`
+收工时说「五问」做 2 分钟轻量复盘；重大节点说「问诊」或「十问」做对抗式全景会诊——先对账执行债，再按四层十问输出盲点、第十人异议、止损线与三个立即动作，报告落盘 `.8917/wenzhen/`。
+
+路径：
+
+```text
+skills/8917-wenzhen/
+```
+
 ---
 
 ## 仓库结构
@@ -131,7 +143,8 @@ skills/8917-expert-panel/
 8917-skills/
 ├── skills/          # skill 资产主目录
 │   ├── 8917-write/
-│   └── 8917-expert-panel/
+│   ├── 8917-expert-panel/
+│   └── 8917-wenzhen/
 ├── protocol/        # 仓库级 Skill 规范（SKILL_SPEC_V2）
 └── README / CHANGELOG / CONTRIBUTING / LICENSE
 ```

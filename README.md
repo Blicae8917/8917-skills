@@ -22,6 +22,7 @@ Current skills in this repository help agents:
 
 - write public long-form articles in a consistent authorial voice (topic gating → evidence chain → drafting → four-layer self-review)
 - assemble an ad-hoc multi-perspective expert panel for roundtable discussion, adversarial review, or planning — works standalone even without a local expert library
+- run adversarial retrospectives on projects and plans (lightweight five-question wrap-up / ten-question full consultation), with an execution-debt ledger loop and `.8917/` workspace persistence
 
 ---
 
@@ -75,6 +76,7 @@ When helping a user from this repository:
 |:---|:---|:---|
 | `8917-write` | Public long-form writing in Ye Chengfeng's voice: dual topic gating (HKR + asset criterion) → evidence chain (citation blocks + source-verification SOP) → four article archetypes → title candidates → four-layer self-review with evidence check first | v0.1, in repo |
 | `8917-expert-panel` | Multi-perspective expert panel: three modes (discussion / review / planning) × two execution tiers (in-conversation / Workflow engine); dual-source expert casting — uses a local expert library when present, otherwise generates personas on the fly with zero external dependencies | v2.1, in repo |
+| `8917-wenzhen` | Two-tier adversarial retrospective ("wenzhen" = diagnostic inquiry): five questions (outpatient, 2-minute wrap-up) / commander's ten questions (full consultation — axis-shifting review, tenth-man dissent, premortem, stop-loss lines); execution-debt ledger loop + `.8917/` workspace persistence | v2.2, in repo |
 
 > Earlier skills (`8917-minimax-toolkit`, `8917-docx-official`, `8917-content-ingest`, `8917-dce-protocol`) were removed in 2026-07 (unmaintained or superseded by stronger general-purpose tools). See git history; users who installed via ClawHub are unaffected. An upgraded official-document skill will return.
 
@@ -88,6 +90,7 @@ Clone the repository and copy the skills you need into your agent's skill direct
 git clone git@github.com:Blicae8917/8917-skills.git
 cp -r 8917-skills/skills/8917-write ~/.claude/skills/
 cp -r 8917-skills/skills/8917-expert-panel ~/.claude/skills/
+cp -r 8917-skills/skills/8917-wenzhen ~/.claude/skills/
 ```
 
 Or simply hand the repository URL to your agent and let it install for you.
@@ -119,6 +122,15 @@ See:
 skills/8917-expert-panel/
 ```
 
+### `8917-wenzhen`
+Say "five questions" at wrap-up for a 2-minute retrospective, or "wenzhen" / "ten questions" at major milestones for a full adversarial consultation — it reconciles the execution-debt ledger first, then outputs blind spots, tenth-man dissent, stop-loss lines, and three immediate actions, persisted to `.8917/wenzhen/`.
+
+See:
+
+```text
+skills/8917-wenzhen/
+```
+
 ---
 
 ## Repository structure
@@ -127,7 +139,8 @@ skills/8917-expert-panel/
 8917-skills/
 ├── skills/          # main home for skill assets
 │   ├── 8917-write/
-│   └── 8917-expert-panel/
+│   ├── 8917-expert-panel/
+│   └── 8917-wenzhen/
 ├── protocol/        # repository-level skill spec (SKILL_SPEC_V2)
 └── README / CHANGELOG / CONTRIBUTING / LICENSE
 ```

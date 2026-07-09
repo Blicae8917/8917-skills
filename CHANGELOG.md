@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `8917-write` v0.1: public long-form writing skill in Ye Chengfeng's voice — dual topic gating (HKR + asset criterion), built-in evidence chain (citation blocks + source-verification SOP), four article archetypes, title candidates, and a four-layer self-review with evidence check first (adapted from khazix-writer + original methodology)
+- `8917-wenzhen` v2.2: two-tier adversarial retrospective (five-question wrap-up / commander's ten questions with tenth-man dissent, premortem, and falsifiability checks); v2.2 wires up `.8917/` workspace persistence and makes the execution-debt ledger location portable (global ledger when configured, workspace-local `.8917/execution-debt.md` otherwise)
 - `8917-skills`: bilingual changelog support via `CHANGELOG_CN.md`
 
 ### Changed
