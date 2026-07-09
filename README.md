@@ -20,10 +20,8 @@ If `8917-organization-mastery` explains the principles and methodology behind 89
 
 Current skills in this repository help agents:
 
-- generate images, video, speech, and music with MiniMax
-- convert Markdown or existing content into official `.docx` documents
-- extract clean text from web pages, X posts, and media links
-- follow a structured DCE (Discuss → Confirm → Execute) execution protocol for high-risk tasks
+- write public long-form articles in a consistent authorial voice (topic gating → evidence chain → drafting → four-layer self-review)
+- assemble an ad-hoc multi-perspective expert panel for roundtable discussion, adversarial review, or planning — works standalone even without a local expert library
 
 ---
 
@@ -49,7 +47,7 @@ If you are giving this repository to an agent (such as OpenClaw), the agent shou
 1. Read this README first
 2. Identify which skill best matches the user’s actual task
 3. Prefer already-published skills when available
-4. If a skill is not yet published, fall back to the repository structure under `skills/native/`
+4. If a skill is not yet published, fall back to the repository structure under `skills/`
 5. Refer to `8917-organization-mastery` when methodology or governance background is needed
 
 ### Copy-paste prompt for OpenClaw or another agent
@@ -66,48 +64,33 @@ If methodology or governance background is needed, also refer to 8917-organizati
 
 When helping a user from this repository:
 - prefer the most stable published skill first
-- otherwise use the local repository path under `skills/native/`
+- otherwise use the local repository path under `skills/`
 - do not confuse skill assets with methodology docs from `8917-organization-mastery`
 
 ---
 
 ## Included skills
 
-### First wave
-
 | Skill | What it does | Status |
 |:---|:---|:---|
-| `8917-minimax-toolkit` | Multi-modal MiniMax toolkit for image, video, speech, voice, and music generation | Published on ClawHub |
-| `8917-docx-official` | Converts Markdown or existing content into official-format `.docx` documents | Published on ClawHub |
-| `8917-content-ingest` | Extracts readable content from URLs, web pages, X posts, and media links | In repo |
+| `8917-write` | Public long-form writing in Ye Chengfeng's voice: dual topic gating (HKR + asset criterion) → evidence chain (citation blocks + source-verification SOP) → four article archetypes → title candidates → four-layer self-review with evidence check first | v0.1, in repo |
+| `8917-expert-panel` | Multi-perspective expert panel: three modes (discussion / review / planning) × two execution tiers (in-conversation / Workflow engine); dual-source expert casting — uses a local expert library when present, otherwise generates personas on the fly with zero external dependencies | v2.1, in repo |
 
-### Second wave (in progress)
-
-| Skill | What it does | Status |
-|:---|:---|:---|
-| `8917-dce-protocol` | Skillized execution layer of DCE for Discuss → Confirm → Execute workflows | In progress |
+> Earlier skills (`8917-minimax-toolkit`, `8917-docx-official`, `8917-content-ingest`, `8917-dce-protocol`) were removed in 2026-07 (unmaintained or superseded by stronger general-purpose tools). See git history; users who installed via ClawHub are unaffected. An upgraded official-document skill will return.
 
 ---
 
 ## Installation
 
-### Option 1: Install published skills
-
-Currently published:
-
-```bash
-clawhub install 8917-minimax-toolkit
-clawhub install 8917-docx-official
-```
-
-### Option 2: Use the repository directly
-
-Clone the repository and reference skills from `skills/native/`:
+Clone the repository and copy the skills you need into your agent's skill directory:
 
 ```bash
 git clone git@github.com:Blicae8917/8917-skills.git
-cd 8917-skills
+cp -r 8917-skills/skills/8917-write ~/.claude/skills/
+cp -r 8917-skills/skills/8917-expert-panel ~/.claude/skills/
 ```
+
+Or simply hand the repository URL to your agent and let it install for you.
 
 ### Current release policy
 
@@ -118,36 +101,22 @@ This repository is not treated as a single bundled release unit.
 
 ## Quick usage examples
 
-### `8917-minimax-toolkit`
-Generate media with MiniMax using a unified output structure.
-
-```bash
-clawhub install 8917-minimax-toolkit
-```
-
-### `8917-docx-official`
-Convert Markdown into an official-format Word document.
-
-```bash
-clawhub install 8917-docx-official
-```
-
-### `8917-content-ingest`
-Use the skill to extract readable body text from links before summarizing, archiving, or analyzing.
+### `8917-write`
+Tell your agent "turn this project retrospective into a public article". The skill runs: topic gating → evidence-chain sourcing → archetype-based drafting → 5-8 title candidates → four-layer self-review with a QA report.
 
 See:
 
 ```text
-skills/native/8917-content-ingest/
+skills/8917-write/
 ```
 
-### `8917-dce-protocol`
-Use DCE when a task requires discussion, explicit confirmation, and controlled execution.
+### `8917-expert-panel`
+Tell your agent "assemble an expert panel to review this plan". The skill runs: expert-source detection (local library / generated personas) → roster confirmation → parallel anti-anchoring dispatch → synthesis of consensus and disagreements.
 
 See:
 
 ```text
-skills/native/8917-dce-protocol/
+skills/8917-expert-panel/
 ```
 
 ---
@@ -156,18 +125,16 @@ skills/native/8917-dce-protocol/
 
 ```text
 8917-skills/
-├── skills/
-│   └── native/
-├── protocol/
-├── references/
-├── pending/
-├── packages/   # migration-era legacy content
-└── specs/      # historical spec files
+├── skills/          # main home for skill assets
+│   ├── 8917-write/
+│   └── 8917-expert-panel/
+├── protocol/        # repository-level skill spec (SKILL_SPEC_V2)
+└── README / CHANGELOG / CONTRIBUTING / LICENSE
 ```
 
 ### Notes
-- `skills/native/` is the main home for current skill assets.
-- `packages/` and `specs/` are retained during migration and should not be treated as the long-term primary structure.
+- Skills live directly under `skills/`.
+- The migration-era directories (`packages/`, `specs/`, `pending/`, `references/`) were cleaned up in 2026-07; see CHANGELOG.
 
 ---
 

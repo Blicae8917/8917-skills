@@ -1,6 +1,6 @@
 ---
 name: 8917-expert-panel
-description: 从本机 232 个专家(~/.claude/agents/)动态组建临时专家团,对当前议题做多视角分析。三模式:讨论(圆桌)/评论(评审)/规划(作战)。双档执行:轻型档对话内手动并行(即时、人在环);重型档把派遣交给 Workflow 引擎(确定性 + fan-in barrier + 规模 + trace)。触发词:组个专家团、多视角看看、找几个专家评一下、专家团讨论、多视角规划、组团分析、让专家们评一下。
+description: 动态组建临时专家团,对当前议题做多视角分析。专家来源双源自动适配:本机装有专家库(~/.claude/agents/,如 agency-agents 的 232 个专家卡)则优先从库选;未安装则按议题现场生成专家 persona,零外部依赖独立运行。三模式:讨论(圆桌)/评论(评审)/规划(作战)。双档执行:轻型档对话内手动并行(即时、人在环);重型档把派遣交给 Workflow 引擎(确定性 + fan-in barrier + 规模 + trace)。触发词:组个专家团、多视角看看、找几个专家评一下、专家团讨论、多视角规划、组团分析、让专家们评一下。
 origin: adapted-from council(ECC) + agency-agents(msitarzewski)
 ---
 
@@ -8,7 +8,7 @@ origin: adapted-from council(ECC) + agency-agents(msitarzewski)
 
 ## 定位
 
-规范型 + Pipeline skill。把「从 232 库动态选专家 → 并行派遣(反锚定)→ 综合」固化成可重复动作。三模式:讨论 / 评论 / 规划。
+规范型 + Pipeline skill。把「组专家(本地库优先 / 现场生成兜底)→ 并行派遣(反锚定)→ 综合」固化成可重复动作。三模式:讨论 / 评论 / 规划。
 
 **v2 双档执行**:轻型档在对话内手动并行(即时、全程人在环);重型档把"派遣"交给 **Workflow 引擎**(拿到确定性 + fan-in barrier + 规模 + trace)。
 
@@ -24,7 +24,7 @@ origin: adapted-from council(ECC) + agency-agents(msitarzewski)
 | 人在环 | 全程 | **前段(确认名单)+ 后段(综合)** |
 | fan-in | 手动声明告警 | 代码级 barrier + `missing` 清单 |
 
-默认轻型。命中任一 → 转重型:① 用户说"重大决策 / 可复现 / 留痕";② 专家 ≥6;③ 要多轮交锋;④ 用户说 `--heavy`。**选档前一句话告知用户走哪档。**
+默认轻型。命中任一 → 转重型:① 用户说"重大决策 / 可复现 / 留痕";② 专家 ≥6;③ 要多轮交锋;④ 用户说 `--heavy`。**选档前一句话告知用户走哪档。** 环境没有 Workflow 工具 → 自动落轻型档并告知。
 
 ## 关键架构铁律(v2)
 
@@ -44,7 +44,7 @@ origin: adapted-from council(ECC) + agency-agents(msitarzewski)
 
 1. **抽议题** — 一句话锁定:决定 / 评 / 规划什么 + 成功标准。模糊先问一句。
 2. **定模式** — 用户指定就用;没指定按议题推断 + 一句话确认。
-3. **选专家** — 从 232 库选 3-5(轻)或 6+(重)个互补的;**对抗性选角**(评论模式给唱反调喂靶子,REFERENCE §1)。
+3. **选专家(双源)** — 先判来源:**本机有专家库**(会话可见 agency 专家卡)→ 从库选;**无库** → 按议题现场生成专家 persona(角色名 + 单一目标 lens + 立场偏置 + 是否唱反调),用通用 subagent 派遣。轻型 3-5 个,重型 6+,互补优先;**对抗性选角**(评论模式给唱反调喂靶子,REFERENCE §1)。名单里注明来源(库选 / 生成)。
 4. **确认名单** — 列「建议召集 X / Y / Z + 理由」,用户增删拍板。**`--auto` / `--heavy` 都不跳过名单确认**(只改执行引擎)。
 5. **派遣**(分档):
    - **轻型** → 对话内一条消息并行多个 Agent 工具调用。**派遣前声明"派了 N 个",综合前点"回了 M 个",M<N 在报告顶部告警**(手动 fan-in barrier)。
@@ -69,6 +69,6 @@ origin: adapted-from council(ECC) + agency-agents(msitarzewski)
 
 ## 相关
 
-- 专家库速查(232 个按场景 + 中文叫法):`~/Code/Research/github-research-lab/research/projects/agency-agents/专家速查-按场景-2026-06-13.md`
+- 专家库(可选增强,非必需):[agency-agents](https://github.com/msitarzewski/agency-agents) 等专家卡集,安装到 `~/.claude/agents/` 后本 skill 自动优先选用;未安装不影响运行(现场生成 persona)
 - 反锚定 + 综合护栏范式来源:`council`(ECC);重型档执行引擎:`Workflow` 工具
 - 自举评审记录(v1 被 5 专家评出 3 个 🔴,v2 已修):见 REFERENCE §7

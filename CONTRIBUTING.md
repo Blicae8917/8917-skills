@@ -27,9 +27,7 @@ cd 8917-skills
    - `protocol/SKILL_SPEC_V2.md`
 
 3. Place the skill in the appropriate structure:
-   - `skills/native/`
-   - `skills/wrappers/` (future)
-   - or `pending/` during incubation
+   - `skills/` — skills live directly at this level (e.g. `skills/8917-write/`)
 
 4. Keep the skill lean:
    - Clear trigger description

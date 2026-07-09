@@ -24,10 +24,8 @@
 
 当前仓库中的 skill 能帮助 Agent：
 
-- 用 MiniMax 生成图片、视频、语音和音乐
-- 把 Markdown 或已有内容转换为正式格式 `.docx` 文档
-- 提取网页、X 帖子和媒体链接的可读正文
-- 在高风险任务中执行 DCE（Discuss → Confirm → Execute）协议
+- 以稳定的作者声音撰写公开长文（选题双重质检 → 证据链 → 成文 → 四层自检）
+- 动态组建多视角专家团，对议题做圆桌讨论 / 对抗评审 / 分工规划（无专家库也能独立运行）
 
 ---
 
@@ -53,7 +51,7 @@
 1. 先读这个 README
 2. 判断哪个 skill 最适合当前任务
 3. 优先使用已经发布的 skill
-4. 如果 skill 还没发布，再回退到 `skills/native/` 下的本地仓路径
+4. 如果 skill 还没发布，再回退到 `skills/` 下的本地仓路径
 5. 如果需要方法论和治理背景，再去参考 `8917-organization-mastery`
 
 ### 可直接复制给 OpenClaw / Agent 的提示语
@@ -69,48 +67,33 @@
 
 当 Agent 帮用户处理这个仓时，应遵循：
 - 优先推荐最稳定、已发布的 skill
-- 否则再使用 `skills/native/` 下的本地路径
+- 否则再使用 `skills/` 下的本地路径
 - 不要把 skill 资产和 `8917-organization-mastery` 的理论文档混为一谈
 
 ---
 
 ## 已包含的 skill
 
-### 第一批
-
 | Skill | 作用 | 状态 |
 |:---|:---|:---|
-| `8917-minimax-toolkit` | MiniMax 多模态生成工具集（图片 / 视频 / 语音 / 音乐） | 已发布到 ClawHub |
-| `8917-docx-official` | 将 Markdown 或已有内容转换为公文 / 正式格式 docx 的 skill | 已发布到 ClawHub |
-| `8917-content-ingest` | 提取 URL / 网页 / X / 视频链接正文的抓取层 skill | 已入库 |
+| `8917-write` | 叶澄风公开长文写作：选题双重质检（HKR + 资产判据）→ 证据链（依据块 + 核源 SOP）→ 四种文章原型 → 标题候选 → 四层自检（证据核验置首） | v0.1，仓内可用 |
+| `8917-expert-panel` | 多视角专家团：三模式（讨论 / 评论 / 规划）× 双档执行（对话内 / Workflow 引擎）；专家来源双源自适应——本机有专家库则优先选用，没有则现场生成 persona，零外部依赖 | v2.1，仓内可用 |
 
-### 第二批（整理中）
-
-| Skill | 作用 | 状态 |
-|:---|:---|:---|
-| `8917-dce-protocol` | DCE 的 skill 化执行版本，负责 Discuss → Confirm → Execute 行为协议 | 整理中 |
+> 早期入库的 `8917-minimax-toolkit`、`8917-docx-official`、`8917-content-ingest`、`8917-dce-protocol` 已于 2026-07 清理出仓（停止维护或被更强的通用工具取代）。历史版本见 git 记录；已通过 ClawHub 安装的用户不受影响。公文写作 skill 将以升级版回归。
 
 ---
 
 ## 安装方式
 
-### 方式 1：安装已发布的 skill
-
-当前已发布：
-
-```bash
-clawhub install 8917-minimax-toolkit
-clawhub install 8917-docx-official
-```
-
-### 方式 2：直接使用仓库
-
-你也可以先 clone 整个仓库，然后从 `skills/native/` 中引用需要的 skill：
+clone 仓库后，把需要的 skill 复制到你的 Agent skill 目录：
 
 ```bash
 git clone git@github.com:Blicae8917/8917-skills.git
-cd 8917-skills
+cp -r 8917-skills/skills/8917-write ~/.claude/skills/
+cp -r 8917-skills/skills/8917-expert-panel ~/.claude/skills/
 ```
+
+或者直接把仓库地址丢给你的 Agent，让它帮你安装。
 
 ### 当前发布策略
 
@@ -122,36 +105,22 @@ cd 8917-skills
 
 ## 快速使用示例
 
-### `8917-minimax-toolkit`
-使用 MiniMax 统一生成多模态内容：
-
-```bash
-clawhub install 8917-minimax-toolkit
-```
-
-### `8917-docx-official`
-安装正式文档转换 skill：
-
-```bash
-clawhub install 8917-docx-official
-```
-
-### `8917-content-ingest`
-用于先从链接中提取干净正文，再交给总结、归档或分析流程。
+### `8917-write`
+对 Agent 说「帮我把这个项目复盘写成公众号文章」即可触发。skill 会走：选题双重质检 → 证据链取材 → 按原型成文 → 出 5-8 个候选标题 → 四层自检并输出质检报告。
 
 路径：
 
 ```text
-skills/native/8917-content-ingest/
+skills/8917-write/
 ```
 
-### `8917-dce-protocol`
-用于高风险任务中的 DCE 行为协议控制。
+### `8917-expert-panel`
+对 Agent 说「组个专家团评一下这个方案」即可触发。skill 会：判定专家来源（本机库 / 现场生成）→ 确认名单 → 并行派遣（反锚定）→ 汇总共识与分歧。
 
 路径：
 
 ```text
-skills/native/8917-dce-protocol/
+skills/8917-expert-panel/
 ```
 
 ---
@@ -160,18 +129,16 @@ skills/native/8917-dce-protocol/
 
 ```text
 8917-skills/
-├── skills/
-│   └── native/
-├── protocol/
-├── references/
-├── pending/
-├── packages/   # 迁移期 legacy 内容
-└── specs/      # 历史规范文件
+├── skills/          # skill 资产主目录
+│   ├── 8917-write/
+│   └── 8917-expert-panel/
+├── protocol/        # 仓库级 Skill 规范（SKILL_SPEC_V2）
+└── README / CHANGELOG / CONTRIBUTING / LICENSE
 ```
 
 ### 说明
-- `skills/native/` 是当前 skill 资产的主目录
-- `packages/` 和 `specs/` 是迁移期保留内容，不是长期主结构
+- `skills/` 是 skill 资产主目录，skill 直接住在此层
+- 历史上的 `packages/`、`specs/`、`pending/`、`references/` 迁移期目录已于 2026-07 清理，详见 CHANGELOG
 
 ---
 
