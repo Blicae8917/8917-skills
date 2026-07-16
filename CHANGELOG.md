@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `8917-skills`: bilingual changelog support via `CHANGELOG_CN.md`
 
 ### Changed
+- `8917-expert-panel` v2.2: runtime-aware routing — Claude Code and Codex now use their own native expert registries; adds a canonical expert-card registry script, capability negotiation, dynamic dispatch waves, mode-specific schemas, failure ledgers, and explicit reproducibility gates; missing heavy-tier capabilities no longer silently masquerade as a successful downgrade
 - `8917-expert-panel` v2.1: dual-source expert casting — prefers the local expert library (`~/.claude/agents/`, e.g. agency-agents) when installed, otherwise generates expert personas on the fly with zero external dependencies; machine-local path references removed for open-source portability
 - Repository structure: skills now live directly under `skills/` (the redundant `native/` layer was removed)
 

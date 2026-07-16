@@ -78,7 +78,7 @@
 | Skill | 作用 | 状态 |
 |:---|:---|:---|
 | `8917-write` | 叶澄风公开长文写作：选题双重质检（HKR + 资产判据）→ 证据链（依据块 + 核源 SOP）→ 四种文章原型 → 标题候选 → 四层自检（证据核验置首） | v0.1，仓内可用 |
-| `8917-expert-panel` | 多视角专家团：三模式（讨论 / 评论 / 规划）× 双档执行（对话内 / Workflow 引擎）；专家来源双源自适应——本机有专家库则优先选用，没有则现场生成 persona，零外部依赖 | v2.1，仓内可用 |
+| `8917-expert-panel` | 多视角专家团：三模式（讨论 / 评论 / 规划）× 双档执行（轻型 / 可留痕重型）；按当前宿主分别使用 Claude Code 或 Codex 原生专家库，能力不足时透明降级或阻断 | v2.2，仓内可用 |
 | `8917-wenzhen` | 问诊·复盘双档：五问（门诊，2 分钟轻量收尾）/ 指挥官十问（会诊，对抗式全景复盘——换轴审查、第十人异议、事前验尸、止损线）；执行债台账闭环 + 产出按 `.8917/` 工作区约定落盘 | v2.2，仓内可用 |
 
 > 早期入库的 `8917-minimax-toolkit`、`8917-docx-official`、`8917-content-ingest`、`8917-dce-protocol` 已于 2026-07 清理出仓（停止维护或被更强的通用工具取代）。历史版本见 git 记录；已通过 ClawHub 安装的用户不受影响。公文写作 skill 将以升级版回归。
@@ -87,16 +87,21 @@
 
 ## 安装方式
 
-clone 仓库后，把需要的 skill 复制到你的 Agent skill 目录：
+clone 仓库后，把需要的 skill 安装到**当前宿主自己的 skill 目录**：Claude Code 使用 `~/.claude/skills/`，Codex 使用 `~/.codex/skills/`。开发机推荐用符号链接或 Junction 指向仓内源码，避免复制副本漂移；只使用单一宿主时只需安装对应入口。
 
 ```bash
 git clone git@github.com:Blicae8917/8917-skills.git
-cp -r 8917-skills/skills/8917-write ~/.claude/skills/
-cp -r 8917-skills/skills/8917-expert-panel ~/.claude/skills/
-cp -r 8917-skills/skills/8917-wenzhen ~/.claude/skills/
+
+# Claude Code
+ln -s "$PWD/8917-skills/skills/8917-expert-panel" ~/.claude/skills/8917-expert-panel
+
+# Codex
+ln -s "$PWD/8917-skills/skills/8917-expert-panel" ~/.codex/skills/8917-expert-panel
 ```
 
-或者直接把仓库地址丢给你的 Agent，让它帮你安装。
+Windows PowerShell 可用 `New-Item -ItemType Junction -Path <宿主 skill 路径> -Target <仓内 skill 路径>`。其他 skill 采用相同规则。Skill 的安装路径与专家库路径是两件事：`8917-expert-panel` 在运行时仍只读取当前宿主自己的专家库（Claude Code：`~/.claude/agents/*.md`；Codex：`~/.codex/agents/*.toml`）。
+
+或者直接把仓库地址丢给你的 Agent，让它按当前宿主安装。
 
 ### 当前发布策略
 
@@ -118,7 +123,7 @@ skills/8917-write/
 ```
 
 ### `8917-expert-panel`
-对 Agent 说「组个专家团评一下这个方案」即可触发。skill 会：判定专家来源（本机库 / 现场生成）→ 确认名单 → 并行派遣（反锚定）→ 汇总共识与分歧。
+对 Agent 说「组个专家团评一下这个方案」即可触发。skill 会：识别当前宿主 → 从宿主原生专家库筛选（Claude Code：`~/.claude/agents/*.md`；Codex：`~/.codex/agents/*.toml`）→ 确认名单 → 反锚定派遣 → 对账失败与返回数量 → 汇总共识和分歧。没有贴合的原生卡时才生成 persona。
 
 路径：
 

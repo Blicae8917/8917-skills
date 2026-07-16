@@ -75,7 +75,7 @@ When helping a user from this repository:
 | Skill | What it does | Status |
 |:---|:---|:---|
 | `8917-write` | Public long-form writing in Ye Chengfeng's voice: dual topic gating (HKR + asset criterion) → evidence chain (citation blocks + source-verification SOP) → four article archetypes → title candidates → four-layer self-review with evidence check first | v0.1, in repo |
-| `8917-expert-panel` | Multi-perspective expert panel: three modes (discussion / review / planning) × two execution tiers (in-conversation / Workflow engine); dual-source expert casting — uses a local expert library when present, otherwise generates personas on the fly with zero external dependencies | v2.1, in repo |
+| `8917-expert-panel` | Multi-perspective expert panel: three modes (discussion / review / planning) × two execution tiers (lightweight / traceable heavy); routes to the current host's native Claude Code or Codex expert library and degrades or blocks transparently when capabilities are missing | v2.2, in repo |
 | `8917-wenzhen` | Two-tier adversarial retrospective ("wenzhen" = diagnostic inquiry): five questions (outpatient, 2-minute wrap-up) / commander's ten questions (full consultation — axis-shifting review, tenth-man dissent, premortem, stop-loss lines); execution-debt ledger loop + `.8917/` workspace persistence | v2.2, in repo |
 
 > Earlier skills (`8917-minimax-toolkit`, `8917-docx-official`, `8917-content-ingest`, `8917-dce-protocol`) were removed in 2026-07 (unmaintained or superseded by stronger general-purpose tools). See git history; users who installed via ClawHub are unaffected. An upgraded official-document skill will return.
@@ -84,16 +84,21 @@ When helping a user from this repository:
 
 ## Installation
 
-Clone the repository and copy the skills you need into your agent's skill directory:
+After cloning the repository, install each skill into the **current host's own skill directory**: Claude Code uses `~/.claude/skills/`, while Codex uses `~/.codex/skills/`. On development machines, prefer a symlink or Windows Junction to the in-repository source so copied installations cannot drift. Install only the entry for the host you use.
 
 ```bash
 git clone git@github.com:Blicae8917/8917-skills.git
-cp -r 8917-skills/skills/8917-write ~/.claude/skills/
-cp -r 8917-skills/skills/8917-expert-panel ~/.claude/skills/
-cp -r 8917-skills/skills/8917-wenzhen ~/.claude/skills/
+
+# Claude Code
+ln -s "$PWD/8917-skills/skills/8917-expert-panel" ~/.claude/skills/8917-expert-panel
+
+# Codex
+ln -s "$PWD/8917-skills/skills/8917-expert-panel" ~/.codex/skills/8917-expert-panel
 ```
 
-Or simply hand the repository URL to your agent and let it install for you.
+On Windows PowerShell, use `New-Item -ItemType Junction -Path <host skill path> -Target <in-repo skill path>`. Other skills follow the same rule. The skill installation path and expert registry path are separate concerns: at runtime, `8917-expert-panel` still reads only the active host's native expert registry (Claude Code: `~/.claude/agents/*.md`; Codex: `~/.codex/agents/*.toml`).
+
+Or hand the repository URL to your agent and ask it to install the skill for the current host.
 
 ### Current release policy
 
@@ -114,7 +119,7 @@ skills/8917-write/
 ```
 
 ### `8917-expert-panel`
-Tell your agent "assemble an expert panel to review this plan". The skill runs: expert-source detection (local library / generated personas) → roster confirmation → parallel anti-anchoring dispatch → synthesis of consensus and disagreements.
+Tell your agent "assemble an expert panel to review this plan". The skill detects the active host, selects from its native expert registry (Claude Code: `~/.claude/agents/*.md`; Codex: `~/.codex/agents/*.toml`), confirms the roster, dispatches with anti-anchoring, reconciles branch failures, and then synthesizes consensus and disagreements. It generates a persona only when no native card fits.
 
 See:
 

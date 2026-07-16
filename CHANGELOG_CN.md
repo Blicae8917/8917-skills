@@ -12,6 +12,7 @@
 - `8917-skills`：新增双语 changelog 支持（`CHANGELOG_CN.md`）
 
 ### 变更
+- `8917-expert-panel` v2.2：运行时感知改造——Claude Code 与 Codex 分别使用各自原生专家库；新增统一专家卡注册表脚本、调用能力探测、动态并发分波、模式化 schema、失败 ledger 与可复现性门槛；重型能力缺失时不再静默伪降级
 - `8917-expert-panel` v2.1：专家来源双源自适应——本机装有专家库（`~/.claude/agents/`，如 agency-agents）则优先选用，未装则现场生成专家 persona、零外部依赖独立运行；移除本机私有路径引用，保证开源可移植性
 - 仓库结构：skill 直接住 `skills/` 层（移除冗余的 `native/` 中间层）
 
