@@ -8,11 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `8917-session-restore` v1.0: restores the Claude Code Desktop session list after switching accounts — auto-detects the current account partition and migrates old-partition records deduplicated by cliSessionId (dry-run / automatic backup / rollback), with a full account-switch impact checklist (macOS)
 - `8917-write` v0.1: public long-form writing skill in Ye Chengfeng's voice — dual topic gating (HKR + asset criterion), built-in evidence chain (citation blocks + source-verification SOP), four article archetypes, title candidates, and a four-layer self-review with evidence check first (adapted from khazix-writer + original methodology)
 - `8917-wenzhen` v2.2: two-tier adversarial retrospective (five-question wrap-up / commander's ten questions with tenth-man dissent, premortem, and falsifiability checks); v2.2 wires up `.8917/` workspace persistence and makes the execution-debt ledger location portable (global ledger when configured, workspace-local `.8917/execution-debt.md` otherwise)
 - `8917-skills`: bilingual changelog support via `CHANGELOG_CN.md`
 
 ### Changed
+- `8917-session-restore` v1.1: cross-platform — auto-detects the storage root on macOS / Windows (Windows: `%APPDATA%\Claude\claude-code-sessions`); backup switched from the external `tar` command to Python's built-in tarfile; migrated records now clear the account-bound fields `bridgeSessionIds` / `remoteMcpServersConfig` (restored entries are local-only; mechanism field-verified on Windows via an equivalent manual migration); metadata reads pinned to UTF-8 (fixes a latent Windows locale-encoding failure on Chinese titles); adds unit tests for sessions_root / sanitize_meta plus a dry-run CLI behavior test
 - `8917-expert-panel` v2.2: runtime-aware routing — Claude Code and Codex now use their own native expert registries; adds a canonical expert-card registry script, capability negotiation, dynamic dispatch waves, mode-specific schemas, failure ledgers, and explicit reproducibility gates; missing heavy-tier capabilities no longer silently masquerade as a successful downgrade
 - `8917-expert-panel` v2.1: dual-source expert casting — prefers the local expert library (`~/.claude/agents/`, e.g. agency-agents) when installed, otherwise generates expert personas on the fly with zero external dependencies; machine-local path references removed for open-source portability
 - Repository structure: skills now live directly under `skills/` (the redundant `native/` layer was removed)

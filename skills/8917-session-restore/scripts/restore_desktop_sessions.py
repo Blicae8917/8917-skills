@@ -1,34 +1,61 @@
 #!/usr/bin/env python3
 """恢复 Claude Code Desktop 会话列表(切换账号后)。
 
-机制:Desktop 会话列表按账号分区存储于
-  ~/Library/Application Support/Claude/claude-code-sessions/<账号UUID>/<组织UUID>/local_*.json
+机制:Desktop 会话列表按账号分区存储,macOS / Windows 目录结构同构:
+  macOS   ~/Library/Application Support/Claude/claude-code-sessions/<账号UUID>/<组织UUID>/local_*.json
+  Windows %APPDATA%/Claude/claude-code-sessions/<账号UUID>/<组织UUID>/local_*.json
 切换账号后新分区为空,旧分区记录仍在磁盘。本脚本把旧分区的会话元数据
 迁入当前分区(按 cliSessionId 去重,自动备份,可回滚),重启 Desktop 后列表恢复。
+迁入时清空 bridgeSessionIds / remoteMcpServersConfig 两个旧账号关联字段
+(云端桥接句柄与连接器配置,恢复的记录声明为纯本地转录入口),其余内容原样保留。
 
 当前分区判定:包含全局最新活动 local_*.json 的账号目录(运行本脚本的会话
 本身就在当前账号下持续写入,故该判定成立;若判定可疑用 --target 指定)。
 
-用法:
+用法(Windows 下 python3 换成 python):
   restore_desktop_sessions.py [--days 7] [--dry-run] [--all] [--target UUID前缀]
 """
 import argparse
 import json
-import shutil
-import subprocess
+import os
 import sys
+import tarfile
 import time
 from datetime import datetime
 from pathlib import Path
 
-SESSIONS_ROOT = Path.home() / "Library/Application Support/Claude/claude-code-sessions"
 BACKUP_DIR = Path.home() / ".claude/backups"
+
+# 迁入时清空的旧账号关联字段:云端桥接句柄 / 连接器配置
+SANITIZED_FIELDS = ("bridgeSessionIds", "remoteMcpServersConfig")
+
+
+def sessions_root(platform=None, env=None):
+    """按平台返回 Desktop 会话列表存储根;不支持的平台返回 None。"""
+    platform = platform or sys.platform
+    env = os.environ if env is None else env
+    if platform == "darwin":
+        return Path.home() / "Library/Application Support/Claude/claude-code-sessions"
+    if platform == "win32":
+        appdata = env.get("APPDATA")
+        base = Path(appdata) if appdata else Path.home() / "AppData/Roaming"
+        return base / "Claude/claude-code-sessions"
+    return None
+
+
+def sanitize_meta(meta):
+    """返回清洗副本:清空旧账号关联字段,其余原样;不改动入参。"""
+    clean = dict(meta)
+    for field in SANITIZED_FIELDS:
+        if field in clean:
+            clean[field] = []
+    return clean
 
 
 def load_meta(path):
     """读会话元数据;损坏文件返回 None(跳过,不中断)。"""
     try:
-        d = json.loads(path.read_text())
+        d = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(d, dict) or "cliSessionId" not in d:
             return None
         return d
@@ -44,12 +71,12 @@ def activity_ts(path, meta):
     return path.stat().st_mtime
 
 
-def scan_partitions():
+def scan_partitions(root):
     """返回 {账号UUID: [(文件路径, 元数据, 活动时间秒), ...]}。"""
     partitions = {}
-    if not SESSIONS_ROOT.is_dir():
-        sys.exit(f"未找到会话存储目录: {SESSIONS_ROOT}")
-    for acct_dir in SESSIONS_ROOT.iterdir():
+    if not root.is_dir():
+        sys.exit(f"未找到会话存储目录: {root}")
+    for acct_dir in root.iterdir():
         if not acct_dir.is_dir():
             continue
         records = []
@@ -91,11 +118,14 @@ def main():
     ap.add_argument("--target", default=None, help="手动指定当前账号分区 UUID 前缀")
     args = ap.parse_args()
 
-    partitions = scan_partitions()
+    root = sessions_root()
+    if root is None:
+        sys.exit(f"暂不支持当前平台: {sys.platform}(本 skill 面向 macOS / Windows 的 Claude Code Desktop)")
+    partitions = scan_partitions(root)
     current_acct, dest_dir = pick_current(partitions, args.target)
     cutoff = 0 if args.all else time.time() - args.days * 86400
 
-    print(f"存储根: {SESSIONS_ROOT}")
+    print(f"存储根: {root}")
     print(f"当前账号分区: {current_acct[:8]}...  目标目录: .../{dest_dir.parent.name[:8]}.../{dest_dir.name[:8]}...")
     print(f"范围: {'全部历史' if args.all else f'最近 {args.days} 天'}"
           f"{'  [dry-run 只读]' if args.dry_run else ''}\n")
@@ -138,11 +168,8 @@ def main():
     BACKUP_DIR.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     backup = BACKUP_DIR / f"claude-code-sessions-backup-{stamp}.tar.gz"
-    subprocess.run(
-        ["tar", "czf", str(backup), "-C", str(SESSIONS_ROOT.parent),
-         SESSIONS_ROOT.name],
-        check=True,
-    )
+    with tarfile.open(backup, "w:gz") as tf:
+        tf.add(root, arcname=root.name)
     print(f"\n已备份: {backup}")
 
     copied = 0
@@ -150,16 +177,20 @@ def main():
         dest = dest_dir / f.name
         if dest.exists():  # 文件名撞车(极小概率),不覆盖
             continue
-        shutil.copy2(f, dest)
+        clean = sanitize_meta(meta)
+        dest.write_text(json.dumps(clean, ensure_ascii=False, separators=(",", ":")),
+                        encoding="utf-8")
         if load_meta(dest) is None:  # 写入后校验
             dest.unlink()
             print(f"  校验失败已移除: {f.name}")
             continue
+        st = f.stat()
+        os.utime(dest, (st.st_atime, st.st_mtime))  # 保留原文件时间线(mtime 兜底排序)
         copied += 1
 
     print(f"迁入完成: {copied}/{len(to_copy)} 条")
     print("\n下一步: 重启 Claude Code Desktop 应用,会话列表即可见。")
-    print(f"回滚: tar xzf {backup} -C '{SESSIONS_ROOT.parent}'")
+    print(f"回滚: tar xzf {backup} -C '{root.parent}'")
 
 
 if __name__ == "__main__":

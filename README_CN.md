@@ -80,6 +80,7 @@
 | `8917-write` | 叶澄风公开长文写作：选题双重质检（HKR + 资产判据）→ 证据链（依据块 + 核源 SOP）→ 四种文章原型 → 标题候选 → 四层自检（证据核验置首） | v0.1，仓内可用 |
 | `8917-expert-panel` | 多视角专家团：三模式（讨论 / 评论 / 规划）× 双档执行（轻型 / 可留痕重型）；按当前宿主分别使用 Claude Code 或 Codex 原生专家库，能力不足时透明降级或阻断 | v2.2，仓内可用 |
 | `8917-wenzhen` | 问诊·复盘双档：五问（门诊，2 分钟轻量收尾）/ 指挥官十问（会诊，对抗式全景复盘——换轴审查、第十人异议、事前验尸、止损线）；执行债台账闭环 + 产出按 `.8917/` 工作区约定落盘 | v2.2，仓内可用 |
+| `8917-session-restore` | 切换 Claude 账号后恢复 Desktop 会话列表：自动判定当前账号分区，旧分区记录按 cliSessionId 去重迁入（dry-run / 自动备份 / 可回滚），附账号切换完整影响面清单；macOS / Windows 双平台 | v1.1，仓内可用 |
 
 > 早期入库的 `8917-minimax-toolkit`、`8917-docx-official`、`8917-content-ingest`、`8917-dce-protocol` 已于 2026-07 清理出仓（停止维护或被更强的通用工具取代）。历史版本见 git 记录；已通过 ClawHub 安装的用户不受影响。公文写作 skill 将以升级版回归。
 
@@ -140,6 +141,15 @@ skills/8917-expert-panel/
 skills/8917-wenzhen/
 ```
 
+### `8917-session-restore`
+切换账号后说「会话列表空了，帮我找回」即可触发。skill 会：定位 Desktop 会话存储根（macOS / Windows 自动判定）→ dry-run 报告可迁移条数 → 自动备份后把旧账号分区的记录去重迁入当前分区 → 提示重启 Desktop，并给出账号切换其余影响面检查清单。
+
+路径：
+
+```text
+skills/8917-session-restore/
+```
+
 ---
 
 ## 仓库结构
@@ -149,7 +159,8 @@ skills/8917-wenzhen/
 ├── skills/          # skill 资产主目录
 │   ├── 8917-write/
 │   ├── 8917-expert-panel/
-│   └── 8917-wenzhen/
+│   ├── 8917-wenzhen/
+│   └── 8917-session-restore/
 ├── protocol/        # 仓库级 Skill 规范（SKILL_SPEC_V2）
 └── README / CHANGELOG / CONTRIBUTING / LICENSE
 ```

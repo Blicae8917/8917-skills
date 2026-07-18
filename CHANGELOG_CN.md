@@ -7,11 +7,13 @@
 ## [未发布]
 
 ### 新增
+- `8917-session-restore` v1.0：切换 Claude 账号后恢复 Desktop 会话列表——自动判定当前账号分区，旧分区记录按 cliSessionId 去重迁入（dry-run / 自动备份 / 可回滚），附账号切换完整影响面清单（macOS）
 - `8917-write` v0.1：叶澄风公开长文写作 skill——选题双重质检（HKR + 资产判据）、内置证据链（依据块 + 核源 SOP）、四种文章原型、标题候选、证据核验置首的四层自检（adapted from khazix-writer + 自有方法论）
 - `8917-wenzhen` v2.2：问诊·复盘双档（五问轻量收尾 / 指挥官十问对抗式会诊，含第十人异议、事前验尸、可证伪性检查）；v2.2 接线 `.8917/` 工作区落盘约定，执行债台账定位可移植化（有全局台账用全局，否则工作区局部 `.8917/execution-debt.md`）
 - `8917-skills`：新增双语 changelog 支持（`CHANGELOG_CN.md`）
 
 ### 变更
+- `8917-session-restore` v1.1：跨平台化——macOS / Windows 存储根自动判定（Windows `%APPDATA%\Claude\claude-code-sessions`）；备份从外部 `tar` 命令改为 Python 内置 tarfile；迁入时清空旧账号关联字段 `bridgeSessionIds` / `remoteMcpServersConfig`（恢复为纯本地入口，机制已在 Windows 端以手工等价迁移实测）；元数据读取固定 UTF-8（修复 Windows 默认编码读中文标题失败的隐性 bug）；新增 sessions_root / sanitize_meta 单测与 dry-run CLI 行为测试
 - `8917-expert-panel` v2.2：运行时感知改造——Claude Code 与 Codex 分别使用各自原生专家库；新增统一专家卡注册表脚本、调用能力探测、动态并发分波、模式化 schema、失败 ledger 与可复现性门槛；重型能力缺失时不再静默伪降级
 - `8917-expert-panel` v2.1：专家来源双源自适应——本机装有专家库（`~/.claude/agents/`，如 agency-agents）则优先选用，未装则现场生成专家 persona、零外部依赖独立运行；移除本机私有路径引用，保证开源可移植性
 - 仓库结构：skill 直接住 `skills/` 层（移除冗余的 `native/` 中间层）

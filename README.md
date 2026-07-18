@@ -77,6 +77,7 @@ When helping a user from this repository:
 | `8917-write` | Public long-form writing in Ye Chengfeng's voice: dual topic gating (HKR + asset criterion) → evidence chain (citation blocks + source-verification SOP) → four article archetypes → title candidates → four-layer self-review with evidence check first | v0.1, in repo |
 | `8917-expert-panel` | Multi-perspective expert panel: three modes (discussion / review / planning) × two execution tiers (lightweight / traceable heavy); routes to the current host's native Claude Code or Codex expert library and degrades or blocks transparently when capabilities are missing | v2.2, in repo |
 | `8917-wenzhen` | Two-tier adversarial retrospective ("wenzhen" = diagnostic inquiry): five questions (outpatient, 2-minute wrap-up) / commander's ten questions (full consultation — axis-shifting review, tenth-man dissent, premortem, stop-loss lines); execution-debt ledger loop + `.8917/` workspace persistence | v2.2, in repo |
+| `8917-session-restore` | Restores the Claude Code Desktop session list after switching accounts: auto-detects the current account partition, migrates old-partition records deduplicated by cliSessionId (dry-run / automatic backup / rollback), with a full account-switch impact checklist; macOS / Windows | v1.1, in repo |
 
 > Earlier skills (`8917-minimax-toolkit`, `8917-docx-official`, `8917-content-ingest`, `8917-dce-protocol`) were removed in 2026-07 (unmaintained or superseded by stronger general-purpose tools). See git history; users who installed via ClawHub are unaffected. An upgraded official-document skill will return.
 
@@ -136,6 +137,15 @@ See:
 skills/8917-wenzhen/
 ```
 
+### `8917-session-restore`
+After switching accounts, tell your agent "my session list is empty, restore it". The skill locates the Desktop session storage root (auto-detected on macOS / Windows), reports migratable records via dry-run, backs up automatically, migrates old-partition records deduplicated into the current partition, then prompts a Desktop restart and walks through the remaining account-switch impact checklist.
+
+See:
+
+```text
+skills/8917-session-restore/
+```
+
 ---
 
 ## Repository structure
@@ -145,7 +155,8 @@ skills/8917-wenzhen/
 ├── skills/          # main home for skill assets
 │   ├── 8917-write/
 │   ├── 8917-expert-panel/
-│   └── 8917-wenzhen/
+│   ├── 8917-wenzhen/
+│   └── 8917-session-restore/
 ├── protocol/        # repository-level skill spec (SKILL_SPEC_V2)
 └── README / CHANGELOG / CONTRIBUTING / LICENSE
 ```
