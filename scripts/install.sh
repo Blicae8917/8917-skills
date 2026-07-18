@@ -15,7 +15,7 @@ repo_skills="$(cd "$(dirname "$0")/../skills" && pwd)"
 linked=0
 found_host=0
 
-for host_root in "$HOME/.claude" "$HOME/.codex"; do
+for host_root in "$HOME/.claude" "$HOME/.codex" "$HOME/.agents"; do
   [ -d "$host_root" ] || continue
   found_host=1
   host_dir="$host_root/skills"
@@ -43,7 +43,7 @@ for host_root in "$HOME/.claude" "$HOME/.codex"; do
 done
 
 if [ "$found_host" -eq 0 ]; then
-  echo "未发现 ~/.claude 或 ~/.codex,本机没有可安装的 Agent 宿主。"
+  echo "未发现 ~/.claude、~/.codex 或 ~/.agents,本机没有可安装的 Agent 宿主。"
   exit 1
 fi
 echo "完成:新装 $linked 个链接。新 skill 在下个 Agent 会话生效。"

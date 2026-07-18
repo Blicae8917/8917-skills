@@ -7,8 +7,9 @@ $repoSkills = (Resolve-Path (Join-Path $PSScriptRoot "..\skills")).Path
 $hostDirs = @()
 if (Test-Path (Join-Path $HOME ".claude")) { $hostDirs += (Join-Path $HOME ".claude\skills") }
 if (Test-Path (Join-Path $HOME ".codex"))  { $hostDirs += (Join-Path $HOME ".codex\skills") }
+if (Test-Path (Join-Path $HOME ".agents")) { $hostDirs += (Join-Path $HOME ".agents\skills") }
 if (-not $hostDirs) {
-    Write-Host "未发现 ~/.claude 或 ~/.codex,本机没有可安装的 Agent 宿主。"
+    Write-Host "未发现 ~/.claude、~/.codex 或 ~/.agents,本机没有可安装的 Agent 宿主。"
     exit 1
 }
 

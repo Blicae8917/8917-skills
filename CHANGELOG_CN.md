@@ -7,7 +7,7 @@
 ## [未发布]
 
 ### 新增
-- `8917-skills`：新增一键安装脚本 `scripts/install.ps1` / `scripts/install.sh`——枚举 `skills/` 把全部 skill 链接到本机已存在的宿主（自动探测 `~/.claude` 与 `~/.codex`），幂等（已装跳过、被占用警告不覆盖）；Git Bash 环境防呆导向 ps1（MSYS 的 `ln -s` 默认是复制）
+- `8917-skills`：新增一键安装脚本 `scripts/install.ps1` / `scripts/install.sh`——枚举 `skills/` 把全部 skill 链接到本机已存在的宿主（自动探测 `~/.claude`、`~/.codex` 与跨 Agent 通用目录 `~/.agents`，后者供 Kimi 等多 Agent 读取），幂等（已装跳过、被占用警告不覆盖）；Git Bash 环境防呆导向 ps1（MSYS 的 `ln -s` 默认是复制）
 - `8917-skills`：新增 skill 清单一致性测试 `tests/test_skill_roster.py`——skills/ 目录、双语 README 清单、SKILL.md name 字段三方对齐，防漏登（源自 `8917-session-restore` v1.0 漏登 CHANGELOG/README 的复盘）
 - `8917-session-restore` v1.0：切换 Claude 账号后恢复 Desktop 会话列表——自动判定当前账号分区，旧分区记录按 cliSessionId 去重迁入（dry-run / 自动备份 / 可回滚），附账号切换完整影响面清单（macOS）
 - `8917-write` v0.1：叶澄风公开长文写作 skill——选题双重质检（HKR + 资产判据）、内置证据链（依据块 + 核源 SOP）、四种文章原型、标题候选、证据核验置首的四层自检（adapted from khazix-writer + 自有方法论）

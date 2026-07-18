@@ -88,7 +88,7 @@
 
 ## 安装方式
 
-clone 仓库后，把需要的 skill 安装到**当前宿主自己的 skill 目录**：Claude Code 使用 `~/.claude/skills/`，Codex 使用 `~/.codex/skills/`。开发机推荐用符号链接或 Junction 指向仓内源码，避免复制副本漂移；只使用单一宿主时只需安装对应入口。
+clone 仓库后，把需要的 skill 安装到**当前宿主自己的 skill 目录**：Claude Code 使用 `~/.claude/skills/`，Codex 使用 `~/.codex/skills/`，Kimi 等其他 Agent 读跨 Agent 通用目录 `~/.agents/skills/`。开发机推荐用符号链接或 Junction 指向仓内源码，避免复制副本漂移；只使用单一宿主时只需安装对应入口。
 
 ```bash
 git clone git@github.com:Blicae8917/8917-skills.git
@@ -102,7 +102,7 @@ ln -s "$PWD/8917-skills/skills/8917-expert-panel" ~/.codex/skills/8917-expert-pa
 
 Windows PowerShell 可用 `New-Item -ItemType Junction -Path <宿主 skill 路径> -Target <仓内 skill 路径>`。其他 skill 采用相同规则。Skill 的安装路径与专家库路径是两件事：`8917-expert-panel` 在运行时仍只读取当前宿主自己的专家库（Claude Code：`~/.claude/agents/*.md`；Codex：`~/.codex/agents/*.toml`）。
 
-**一键安装**：不想逐个手工链接时，跑仓内安装脚本——枚举 `skills/` 把全部 skill 一次性链接到本机已存在的宿主（自动探测 `~/.claude` 与 `~/.codex`；幂等：已装的跳过，路径被占用且不是指向本仓的只警告不覆盖）：
+**一键安装**：不想逐个手工链接时，跑仓内安装脚本——枚举 `skills/` 把全部 skill 一次性链接到本机已存在的宿主（自动探测 `~/.claude`、`~/.codex` 与跨 Agent 通用目录 `~/.agents`；幂等：已装的跳过，路径被占用且不是指向本仓的只警告不覆盖）：
 
 ```bash
 ./scripts/install.sh       # macOS / Linux

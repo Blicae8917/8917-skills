@@ -85,7 +85,7 @@ When helping a user from this repository:
 
 ## Installation
 
-After cloning the repository, install each skill into the **current host's own skill directory**: Claude Code uses `~/.claude/skills/`, while Codex uses `~/.codex/skills/`. On development machines, prefer a symlink or Windows Junction to the in-repository source so copied installations cannot drift. Install only the entry for the host you use.
+After cloning the repository, install each skill into the **current host's own skill directory**: Claude Code uses `~/.claude/skills/`, Codex uses `~/.codex/skills/`, and other agents (e.g. Kimi) read the cross-agent global directory `~/.agents/skills/`. On development machines, prefer a symlink or Windows Junction to the in-repository source so copied installations cannot drift. Install only the entry for the host you use.
 
 ```bash
 git clone git@github.com:Blicae8917/8917-skills.git
@@ -99,7 +99,7 @@ ln -s "$PWD/8917-skills/skills/8917-expert-panel" ~/.codex/skills/8917-expert-pa
 
 On Windows PowerShell, use `New-Item -ItemType Junction -Path <host skill path> -Target <in-repo skill path>`. Other skills follow the same rule. The skill installation path and expert registry path are separate concerns: at runtime, `8917-expert-panel` still reads only the active host's native expert registry (Claude Code: `~/.claude/agents/*.md`; Codex: `~/.codex/agents/*.toml`).
 
-**One-shot install**: instead of linking skills one by one, run the bundled installer — it enumerates `skills/` and links every skill into each host present on the machine (auto-detects `~/.claude` and `~/.codex`; idempotent: already-installed links are skipped, occupied paths that are not links into this repository trigger a warning and are never overwritten):
+**One-shot install**: instead of linking skills one by one, run the bundled installer — it enumerates `skills/` and links every skill into each host present on the machine (auto-detects `~/.claude`, `~/.codex`, and the cross-agent `~/.agents`; idempotent: already-installed links are skipped, occupied paths that are not links into this repository trigger a warning and are never overwritten):
 
 ```bash
 ./scripts/install.sh       # macOS / Linux
