@@ -102,6 +102,16 @@ ln -s "$PWD/8917-skills/skills/8917-expert-panel" ~/.codex/skills/8917-expert-pa
 
 Windows PowerShell 可用 `New-Item -ItemType Junction -Path <宿主 skill 路径> -Target <仓内 skill 路径>`。其他 skill 采用相同规则。Skill 的安装路径与专家库路径是两件事：`8917-expert-panel` 在运行时仍只读取当前宿主自己的专家库（Claude Code：`~/.claude/agents/*.md`；Codex：`~/.codex/agents/*.toml`）。
 
+**一键安装**：不想逐个手工链接时，跑仓内安装脚本——枚举 `skills/` 把全部 skill 一次性链接到本机已存在的宿主（自动探测 `~/.claude` 与 `~/.codex`；幂等：已装的跳过，路径被占用且不是指向本仓的只警告不覆盖）：
+
+```bash
+./scripts/install.sh       # macOS / Linux
+```
+
+```powershell
+.\scripts\install.ps1      # Windows
+```
+
 或者直接把仓库地址丢给你的 Agent，让它按当前宿主安装。
 
 ### 当前发布策略
@@ -161,6 +171,7 @@ skills/8917-session-restore/
 │   ├── 8917-expert-panel/
 │   ├── 8917-wenzhen/
 │   └── 8917-session-restore/
+├── scripts/         # 一键安装（install.ps1 / install.sh）
 ├── protocol/        # 仓库级 Skill 规范（SKILL_SPEC_V2）
 └── README / CHANGELOG / CONTRIBUTING / LICENSE
 ```

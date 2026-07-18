@@ -130,6 +130,48 @@ class DryRunCliTests(unittest.TestCase):
             # dry-run 未写入任何文件
             self.assertEqual(1, len(list(cur_org.glob("local_*.json"))))
 
+    def test_from_and_cwd_filters_narrow_candidates(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp = Path(temp_dir)
+            env = dict(os.environ)
+            env.update(
+                {
+                    "HOME": str(temp),
+                    "USERPROFILE": str(temp),
+                    "APPDATA": str(temp / "AppData" / "Roaming"),
+                    "PYTHONUTF8": "1",
+                }
+            )
+            if sys.platform == "win32":
+                root = Path(env["APPDATA"]) / "Claude/claude-code-sessions"
+            else:
+                root = temp / "Library/Application Support/Claude/claude-code-sessions"
+            now_ms = int(time.time() * 1000)
+            self._write_record(root / "acct-new-uuid" / "org-a", "cur", "cli-cur", now_ms)
+            self._write_record(
+                root / "acct-old-uuid" / "org-b", "old1", "cli-old1", now_ms - 1000
+            )
+            self._write_record(
+                root / "acct-two-uuid" / "org-c", "two1", "cli-two1", now_ms - 1000
+            )
+
+            def run(*extra: str) -> str:
+                proc = subprocess.run(
+                    [sys.executable, str(SCRIPT), "--dry-run", *extra],
+                    check=False,
+                    capture_output=True,
+                    text=True,
+                    encoding="utf-8",
+                    env=env,
+                )
+                self.assertEqual(0, proc.returncode, proc.stderr)
+                return proc.stdout
+
+            self.assertIn("待迁入 2 条", run())
+            self.assertIn("待迁入 1 条", run("--from", "acct-old"))
+            self.assertIn("待迁入 2 条", run("--cwd", "/tmp/p"))
+            self.assertIn("待迁入 0 条", run("--cwd", "no-such-path"))
+
 
 if __name__ == "__main__":
     unittest.main()

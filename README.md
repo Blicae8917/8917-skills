@@ -99,6 +99,16 @@ ln -s "$PWD/8917-skills/skills/8917-expert-panel" ~/.codex/skills/8917-expert-pa
 
 On Windows PowerShell, use `New-Item -ItemType Junction -Path <host skill path> -Target <in-repo skill path>`. Other skills follow the same rule. The skill installation path and expert registry path are separate concerns: at runtime, `8917-expert-panel` still reads only the active host's native expert registry (Claude Code: `~/.claude/agents/*.md`; Codex: `~/.codex/agents/*.toml`).
 
+**One-shot install**: instead of linking skills one by one, run the bundled installer — it enumerates `skills/` and links every skill into each host present on the machine (auto-detects `~/.claude` and `~/.codex`; idempotent: already-installed links are skipped, occupied paths that are not links into this repository trigger a warning and are never overwritten):
+
+```bash
+./scripts/install.sh       # macOS / Linux
+```
+
+```powershell
+.\scripts\install.ps1      # Windows
+```
+
 Or hand the repository URL to your agent and ask it to install the skill for the current host.
 
 ### Current release policy
@@ -157,6 +167,7 @@ skills/8917-session-restore/
 │   ├── 8917-expert-panel/
 │   ├── 8917-wenzhen/
 │   └── 8917-session-restore/
+├── scripts/         # one-shot installers (install.ps1 / install.sh)
 ├── protocol/        # repository-level skill spec (SKILL_SPEC_V2)
 └── README / CHANGELOG / CONTRIBUTING / LICENSE
 ```

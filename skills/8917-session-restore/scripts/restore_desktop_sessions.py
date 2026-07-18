@@ -14,6 +14,7 @@
 
 用法(Windows 下 python3 换成 python):
   restore_desktop_sessions.py [--days 7] [--dry-run] [--all] [--target UUID前缀]
+                              [--from 旧分区UUID前缀] [--cwd 路径子串]
 """
 import argparse
 import json
@@ -116,6 +117,9 @@ def main():
     ap.add_argument("--all", action="store_true", help="不限天数,恢复全部")
     ap.add_argument("--dry-run", action="store_true", help="只报告,不备份不写入")
     ap.add_argument("--target", default=None, help="手动指定当前账号分区 UUID 前缀")
+    ap.add_argument("--from", dest="from_prefix", default=None,
+                    help="只从匹配该 UUID 前缀的旧分区迁入(多旧账号时筛源)")
+    ap.add_argument("--cwd", default=None, help="只迁入 cwd 包含该子串的记录")
     args = ap.parse_args()
 
     root = sessions_root()
@@ -127,17 +131,27 @@ def main():
 
     print(f"存储根: {root}")
     print(f"当前账号分区: {current_acct[:8]}...  目标目录: .../{dest_dir.parent.name[:8]}.../{dest_dir.name[:8]}...")
+    filters = []
+    if args.from_prefix:
+        filters.append(f"源分区前缀={args.from_prefix}")
+    if args.cwd:
+        filters.append(f"cwd 含「{args.cwd}」")
     print(f"范围: {'全部历史' if args.all else f'最近 {args.days} 天'}"
+          f"{('  ' + ' / '.join(filters)) if filters else ''}"
           f"{'  [dry-run 只读]' if args.dry_run else ''}\n")
 
     existing_ids = {m["cliSessionId"] for _, m, _ in partitions[current_acct]}
+    existing_titles = {m.get("title") for _, m, _ in partitions[current_acct]}
 
     # 收集候选:其余分区中时间窗内的记录;同 cliSessionId 多份时取最新
     candidates = {}
     for acct, recs in partitions.items():
         if acct == current_acct:
             continue
-        in_window = [r for r in recs if r[2] >= cutoff]
+        if args.from_prefix and not acct.startswith(args.from_prefix):
+            continue
+        in_window = [r for r in recs if r[2] >= cutoff
+                     and (not args.cwd or args.cwd in r[1].get("cwd", ""))]
         latest = max((ts for _, _, ts in recs), default=None)
         latest_h = datetime.fromtimestamp(latest).strftime("%m-%d %H:%M") if latest else "-"
         print(f"  旧分区 {acct[:8]}...  共 {len(recs)} 条,窗口内 {len(in_window)} 条,最近活动 {latest_h}")
@@ -157,7 +171,8 @@ def main():
         return
     for _, meta, ts in sorted(to_copy, key=lambda r: -r[2])[:10]:
         t = datetime.fromtimestamp(ts).strftime("%m-%d %H:%M")
-        print(f"    {t}  {meta.get('title', '<无标题>')[:50]}  ({meta.get('cwd', '?')})")
+        hint = "  ←同名已存在,疑似 fork" if meta.get("title") in existing_titles else ""
+        print(f"    {t}  {meta.get('title', '<无标题>')[:50]}  ({meta.get('cwd', '?')}){hint}")
     if len(to_copy) > 10:
         print(f"    ... 及另外 {len(to_copy) - 10} 条")
 
